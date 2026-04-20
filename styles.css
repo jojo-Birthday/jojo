@@ -507,22 +507,24 @@ body {
 }
 
 /* ============================================
-   MUSIC BUTTON
-   ============================================ */
+    MUSIC BUTTON
+    ============================================ */
 .music-btn {
     position: fixed;
-    bottom: 20px;
-    right: 20px;
-    background: rgba(255, 255, 255, 0.5);
+    bottom: 24px;
+    right: 24px;
+    width: 56px;
+    height: 56px;
+    background: rgba(255, 255, 255, 0.6);
     backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
     border: 1px solid var(--glass-border);
-    border-radius: 50px;
-    padding: 12px 20px;
+    border-radius: 50%;
     cursor: pointer;
     display: flex;
     align-items: center;
-    gap: 8px;
-    box-shadow: 0 6px 20px rgba(219, 39, 119, 0.2);
+    justify-content: center;
+    box-shadow: 0 8px 25px rgba(219, 39, 119, 0.25);
     z-index: 1000;
     transition: all 0.3s ease;
 }
@@ -538,20 +540,23 @@ body {
 }
 
 .music-btn:hover {
-    transform: scale(1.05);
-    background: rgba(255, 255, 255, 0.7);
+    transform: scale(1.1);
+    background: rgba(255, 255, 255, 0.8);
 }
 
-.music-btn i { color: var(--text-medium); font-size: 1rem; }
-.music-btn span { font-size: 0.85rem; font-weight: 500; color: var(--text-medium); }
+.music-btn i {
+    color: var(--pink-rich);
+    font-size: 1.3rem;
+    transition: all 0.3s ease;
+}
 
 .music-btn.active {
-    background: linear-gradient(135deg, var(--pink-warm), var(--pink-deep));
+    background: linear-gradient(135deg, var(--pink-rose), var(--pink-deep));
     border-color: transparent;
+    box-shadow: 0 8px 30px rgba(219, 39, 119, 0.4);
 }
 
-.music-btn.active i,
-.music-btn.active span {
+.music-btn.active i {
     color: white;
 }
 

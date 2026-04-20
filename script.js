@@ -106,9 +106,6 @@ document.addEventListener('DOMContentLoaded', () => {
             // Start confetti
             startConfetti();
             
-            // Start music
-            playMusic();
-            
             // Scroll to message
             setTimeout(() => {
                 messageSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -233,25 +230,32 @@ document.addEventListener('DOMContentLoaded', () => {
     // 7. MUSIC PLAYER
     // ============================================
     let isPlaying = false;
-    bgMusic.volume = 0.3;
+    bgMusic.volume = 0.4;
     
     function playMusic() {
         bgMusic.play().then(() => {
             isPlaying = true;
             musicBtn.classList.add('active');
+            musicBtn.querySelector('i').classList.replace('fa-play', 'fa-pause');
             localStorage.setItem('musicEnabled', 'true');
-        }).catch(() => {});
+        }).catch((e) => {
+            console.log('Autoplay blocked:', e);
+        });
     }
     
     musicBtn.addEventListener('click', function() {
         if (isPlaying) {
             bgMusic.pause();
             musicBtn.classList.remove('active');
+            musicBtn.querySelector('i').classList.replace('fa-pause', 'fa-play');
             localStorage.setItem('musicEnabled', 'false');
         } else {
             bgMusic.play().then(() => {
                 musicBtn.classList.add('active');
+                musicBtn.querySelector('i').classList.replace('fa-play', 'fa-pause');
                 localStorage.setItem('musicEnabled', 'true');
+            }).catch((e) => {
+                console.log('Playback failed:', e);
             });
         }
         isPlaying = !isPlaying;
