@@ -103,6 +103,11 @@ document.addEventListener('DOMContentLoaded', () => {
             // Show music button
             musicBtn.classList.add('show');
             
+            // Auto-resume music if was previously enabled
+            if (localStorage.getItem('musicEnabled') === 'true') {
+                playMusic();
+            }
+            
             // Start confetti
             startConfetti();
             
