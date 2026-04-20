@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday Jojo 💕</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Quicksand:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- FLOATING HEARTS (reactive) -->
+    <div class="floating-hearts" id="floatingHearts"></div>
+
+    <section class="hero" id="hero">
+        <div class="hero-content">
+            <div class="hero-hearts" data-aos="fade-down" data-aos-duration="1000">
+                <span>💖</span><span>✨</span><span>💕</span><span>🌸</span><span>💖</span>
+            </div>
+            
+            <h1 class="hero-title" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="150">
+                Happy Birthday<br>
+                <span class="title-name">Jojo</span>
+            </h1>
+            
+            <!-- COUNTDOWN TIMER -->
+            <div class="countdown-box" id="countdown" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="300">
+                <div class="countdown-grid">
+                    <div class="countdown-item">
+                        <span class="countdown-value" id="days">00</span>
+                        <span class="countdown-label">Days</span>
+                    </div>
+                    <div class="countdown-item">
+                        <span class="countdown-value" id="hours">00</span>
+                        <span class="countdown-label">Hours</span>
+                    </div>
+                    <div class="countdown-item">
+                        <span class="countdown-value" id="minutes">00</span>
+                        <span class="countdown-label">Min</span>
+                    </div>
+                    <div class="countdown-item">
+                        <span class="countdown-value" id="seconds">00</span>
+                        <span class="countdown-label">Sec</span>
+                    </div>
+                </div>
+            </div>
+            
+            <button class="reveal-btn" id="revealBtn" data-aos="fade-up" data-aos-duration="800" data-aos-delay="450">
+                <span class="btn-text">Tap to see your message</span>
+                <span class="btn-emoji">💌</span>
+            </button>
+            
+            <div class="celebration-msg" id="birthdayMsg" style="display: none;">
+                <h2 class="celebration-title" data-aos="zoom-in">🎉 Happy Birthday, Jojo! 💖 🎉</h2>
+            </div>
+        </div>
+    </section>
+
+    <!-- MESSAGE CARD (staggered reveal) -->
+    <section class="message-section" id="messageSection">
+        <div class="message-wrapper">
+            <div class="message-card hidden" id="messageCard">
+                <div class="card-hearts">
+                    <span>💖</span><span>💕</span><span>✨</span>
+                </div>
+                
+                <div class="message-lines">
+                    <p class="message-line" data-aos="fade-up" data-aos-duration="800" data-aos-delay="0">
+                        Happy Birthday to the most beautiful Jojo! 
+                        <span class="heart-inline">💖</span>
+                    </p>
+                    <p class="message-line" data-aos="fade-up" data-aos-duration="800" data-aos-delay="150">
+                        You came into my life at a time when I was incredibly exhausted, and you stayed by my side.
+                    </p>
+                    <p class="message-line" data-aos="fade-up" data-aos-duration="800" data-aos-delay="300">
+                        I hope we continue our journey together forever as the best of friends and siblings.
+                    </p>
+                    <p class="message-line" data-aos="fade-up" data-aos-duration="800" data-aos-delay="450">
+                        You are truly the most wonderful girl 
+                        <span class="heart-inline">💕</span>
+                    </p>
+                </div>
+                
+                <p class="signature" data-aos="fade-up" data-aos-duration="800" data-aos-delay="600">- Felo</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- PHOTO GALLERY (3D card deal) -->
+    <section class="gallery-section" id="gallerySection">
+        <h2 class="gallery-title" data-aos="fade-up">Memories</h2>
+        
+        <div class="gallery-stack">
+            <div class="photo-card" data-aos="card-deal" data-aos-duration="800" data-aos-delay="100">
+                <div class="photo-frame">
+                    <div class="glow-layer"></div>
+                    <img src="images/photo1.jpg.jpeg" alt="Memory 1" class="photo-img">
+                </div>
+            </div>
+            <div class="photo-card" data-aos="card-deal" data-aos-duration="800" data-aos-delay="200">
+                <div class="photo-frame">
+                    <div class="glow-layer"></div>
+                    <img src="images/photo2.jpg.jpeg" alt="Memory 2" class="photo-img">
+                </div>
+            </div>
+            <div class="photo-card" data-aos="card-deal" data-aos-duration="800" data-aos-delay="300">
+                <div class="photo-frame">
+                    <div class="glow-layer"></div>
+                    <img src="images/photo3.jpg.jpeg" alt="Memory 3" class="photo-img">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <button class="music-btn hidden" id="musicBtn">
+        <i class="fa-solid fa-music"></i>
+        <span>Music</span>
+    </button>
+
+    <audio id="bgMusic" loop>
+        <source src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3" type="audio/mpeg">
+    </audio>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
