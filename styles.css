@@ -378,8 +378,9 @@ body {
    ============================================ */
 .gallery-section {
     display: none;
-    padding: 50px 20px 100px;
+    padding: 40px 10px 60px;
     background: linear-gradient(180deg, var(--pink-light) 0%, var(--pink-soft) 100%);
+    overflow-x: hidden;
 }
 
 .gallery-title {
@@ -394,10 +395,11 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 15px;
-    max-width: 500px;
+    gap: 10px;
+    max-width: 100%;
     margin: 0 auto;
     perspective: 800px;
+    padding: 0 10px;
 }
 
 .photo-card {
@@ -420,7 +422,7 @@ body {
     position: relative;
     background: white;
     border-radius: 18px;
-    padding: 10px 10px 32px 10px;
+    padding: 8px 8px 24px 8px;
     box-shadow: 0 8px 25px rgba(219, 39, 119, 0.15);
     transition: all 0.4s ease;
     overflow: visible;
@@ -464,10 +466,11 @@ body {
 
 /* LARGER CUTE BOUNCY FLOAT - Show more of the image */
 .photo-img {
-    width: 140px;
-    height: 180px;
+    width: clamp(100px, 28vw, 140px);
+    height: auto;
+    aspect-ratio: 7 / 9;
     object-fit: cover;
-    object-position: center 35%;
+    object-position: center 30%;
     border-radius: 10px;
     display: block;
     background: var(--pink-soft);
@@ -491,13 +494,14 @@ body {
 
 @media (min-width: 500px) {
     .photo-img {
-        width: 180px;
-        height: 230px;
+        width: 160px;
+        height: auto;
+        aspect-ratio: 7 / 9;
         object-position: center 30%;
     }
     
     .gallery-stack {
-        gap: 16px;
+        gap: 14px;
         max-width: 600px;
     }
 }
@@ -559,4 +563,6 @@ body {
     .countdown-value { font-size: 1.3rem; }
     .reveal-btn { padding: 14px 24px; }
     .btn-text { font-size: 0.85rem; }
+    .photo-img { width: 85px; }
+    .gallery-stack { gap: 6px; }
 }
