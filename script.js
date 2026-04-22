@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // ============================================
     // 1. COUNTDOWN TIMER - STRICT INTERVAL LOGIC
     // ============================================
-    const targetDate = new Date("April 22, 2026 00:00:00").getTime();
+    const targetDate = new Date("April 25, 2026 00:00:00").getTime();
     
     const daysEl = document.getElementById("days");
     const hoursEl = document.getElementById("hours");
