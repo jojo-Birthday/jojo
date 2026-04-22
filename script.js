@@ -13,30 +13,65 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // ============================================
-    // 1. COUNTDOWN TIMER
+    // 1. COUNTDOWN TIMER - STRICT INTERVAL LOGIC
     // ============================================
-    const targetDate = new Date("April 25, 2026 00:00:00").getTime();
+    const targetDate = new Date("April 22, 2026 00:00:00").getTime();
     
     const daysEl = document.getElementById("days");
     const hoursEl = document.getElementById("hours");
     const minutesEl = document.getElementById("minutes");
     const secondsEl = document.getElementById("seconds");
+    const countdown = document.getElementById("countdown");
+    const revealBtn = document.getElementById("revealBtn");
     
-    const countdownInterval = setInterval(updateCountdown, 1000);
-    updateCountdown();
+    // Initialize button as hidden by default
+    revealBtn.style.display = 'none';
+    revealBtn.style.opacity = '0';
     
     let hasRevealed = false;
+    let countdownComplete = false;
     
     function updateCountdown() {
         const now = new Date().getTime();
         const distance = targetDate - now;
         
+        // CRITICAL: If distance > 0, button MUST remain display: none
+        if (distance > 0) {
+            revealBtn.style.display = 'none';
+            revealBtn.style.opacity = '0';
+        }
+        
+        // Last 10 seconds: add vibrate animation
+        if (distance > 0 && distance <= 10000) {
+            countdown.classList.add('vibrate');
+        } else {
+            countdown.classList.remove('vibrate');
+        }
+        
+        // THE MOMENT OF ZERO - Strict transition sequence
         if (distance <= 0) {
             clearInterval(countdownInterval);
-            triggerReveal();
+            countdownComplete = true;
+            
+            // Step 1: Fade out timerDisplay (opacity to 0 over 0.5s)
+            countdown.classList.add('fade-out');
+            countdown.classList.remove('vibrate');
+            
+            setTimeout(() => {
+                // Step 2: Completely delete the timer from DOM
+                countdown.remove();
+                
+                // Step 3: Show the message button
+                revealBtn.style.display = 'inline-flex';
+                revealBtn.style.opacity = '1';
+                revealBtn.classList.add('show');
+                
+            }, 500);
+            
             return;
         }
         
+        // Update countdown values
         const days = Math.floor(distance / (1000 * 60 * 60 * 24));
         const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
         const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
@@ -47,13 +82,59 @@ document.addEventListener('DOMContentLoaded', () => {
         minutesEl.textContent = String(minutes).padStart(2, "0");
         secondsEl.textContent = String(seconds).padStart(2, "0");
     }
-
+    
+    const countdownInterval = setInterval(updateCountdown, 1000);
+    updateCountdown();
+    
+    // Check if countdown already complete on page load (and wasn't already handled)
+    if (countdown && targetDate - new Date().getTime() <= 0) {
+        clearInterval(countdownInterval);
+        if (countdown.parentNode) {
+            countdown.remove();
+        }
+        revealBtn.style.display = 'inline-flex';
+        revealBtn.style.opacity = '1';
+        revealBtn.classList.add('show');
+        countdownComplete = true;
+    }
+    
     // ============================================
-    // 2. REVEAL BUTTON & ANIMATIONS
+    // 2. REVEAL BUTTON - ERROR PREVENTION
     // ============================================
     
-    const revealBtn = document.getElementById("revealBtn");
-    const countdown = document.getElementById("countdown");
+    // Define click handler ONCE - cannot be triggered before countdown ends
+    revealBtn.addEventListener("click", function handleReveal() {
+        // Prevent any multiple triggers
+        if (hasRevealed || !countdownComplete) {
+            return;
+        }
+        
+        hasRevealed = true;
+        
+        // Remove event listener to prevent future triggers
+        revealBtn.removeEventListener("click", handleReveal);
+        
+        // Safely clear interval if it exists
+        try {
+            clearInterval(countdownInterval);
+        } catch (e) {
+            // Interval already cleared, ignore
+        }
+        
+        // Fade out the button smoothly
+        revealBtn.classList.add('hide');
+        
+        // After fade animation completes (0.4s), remove button and trigger content reveal
+        setTimeout(() => {
+            revealBtn.remove();
+            triggerReveal();
+        }, 400);
+    });
+
+    // ============================================
+    // 3. REVEAL BUTTON & ANIMATIONS
+    // ============================================
+    
     const birthdayMsg = document.getElementById("birthdayMsg");
     const messageSection = document.getElementById("messageSection");
     const messageCard = document.getElementById("messageCard");
@@ -64,17 +145,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const bigCountdown = document.getElementById("bigCountdown");
     const bigCountdownNumber = document.getElementById("bigCountdownNumber");
     
-    // Click reveal button
-    revealBtn.addEventListener("click", function() {
-        if (!hasRevealed) {
-            hasRevealed = true;
-            clearInterval(countdownInterval);
-            triggerReveal();
-        }
-    });
-    
-    let femaleVoice = null;
-    let maleVoice = null;
+    // Click reveal button - removed (now handled by guard above)
     
     function initVoice() {
         const voices = speechSynthesis.getVoices();
@@ -149,7 +220,7 @@ document.addEventListener('DOMContentLoaded', () => {
             triggerHeartBurst();
             
             birthdayMsg.style.display = 'block';
-            messageSection.style.display = 'flex';
+            messageSection.classList.add('show');
             
             setTimeout(() => {
                 messageCard.classList.add('show');
