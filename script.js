@@ -25,6 +25,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const countdownInterval = setInterval(updateCountdown, 1000);
     updateCountdown();
     
+    let hasRevealed = false;
+    
     function updateCountdown() {
         const now = new Date().getTime();
         const distance = targetDate - now;
@@ -49,7 +51,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // ============================================
     // 2. REVEAL BUTTON & ANIMATIONS
     // ============================================
-    let hasRevealed = false;
     
     const revealBtn = document.getElementById("revealBtn");
     const countdown = document.getElementById("countdown");
@@ -60,6 +61,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const musicBtn = document.getElementById("musicBtn");
     const bgMusic = document.getElementById("bgMusic");
     const floatingHearts = document.getElementById("floatingHearts");
+    const bigCountdown = document.getElementById("bigCountdown");
+    const bigCountdownNumber = document.getElementById("bigCountdownNumber");
     
     // Click reveal button
     revealBtn.addEventListener("click", function() {
@@ -70,51 +73,101 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
     
-    function triggerReveal() {
-        // Elegant shrink countdown
-        countdown.classList.add('shrink');
-        revealBtn.classList.add('hide');
-        
-        // Reactivate floating hearts (burst effect)
-        triggerHeartBurst();
-        
+    let femaleVoice = null;
+    let maleVoice = null;
+    
+    function initVoice() {
+        const voices = speechSynthesis.getVoices();
+        if (voices.length > 0) {
+            femaleVoice = voices.find(v => v.name.includes('Female')) || voices[0];
+            maleVoice = voices.find(v => v.name.includes('Male')) || voices[0];
+        }
+    }
+    
+    speechSynthesis.onvoiceschanged = initVoice;
+    initVoice();
+    
+    function speakCrowd(num, delay = 0) {
         setTimeout(() => {
-            countdown.style.display = 'none';
-            revealBtn.style.display = 'none';
+            speechSynthesis.cancel();
+            const count = 4;
+            for (let i = 0; i < count; i++) {
+                setTimeout(() => {
+                    const utterance = new SpeechSynthesisUtterance(String(num));
+                    utterance.rate = 1.1 + Math.random() * 0.3;
+                    utterance.pitch = 0.9 + Math.random() * 0.4;
+                    utterance.volume = 0.8;
+                    utterance.voice = (i % 2 === 0 && femaleVoice) ? femaleVoice : (maleVoice || femaleVoice);
+                    speechSynthesis.speak(utterance);
+                }, i * 100);
+            }
+        }, delay);
+    }
+    
+    function runBigCountdown(callback) {
+        countdown.style.display = 'none';
+        revealBtn.style.display = 'none';
+        
+        bigCountdown.classList.add('show');
+        
+        function showCount(num) {
+            bigCountdownNumber.textContent = num;
+            bigCountdownNumber.style.animation = 'none';
+            bigCountdownNumber.offsetHeight;
+            bigCountdownNumber.style.animation = 'bigCountdownPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)';
             
-            // Show birthday message
+            const countdownSub = document.getElementById("countdownSub");
+            const messages = { 3: "The sweetest💕", 2: "Jojo💖", 1: "The princess👑" };
+            if (countdownSub) {
+                countdownSub.textContent = messages[num] || "The Queen🌸";
+            }
+        }
+        
+        function processCount(num, delay, done) {
+            setTimeout(() => {
+                showCount(num);
+                if (done) {
+                    const countdownSub = document.getElementById("countdownSub");
+                    if (countdownSub) countdownSub.textContent = "The Queen🌸";
+                    setTimeout(() => {
+                        bigCountdown.classList.remove('show');
+                        callback();
+                    }, 800);
+                }
+            }, delay);
+        }
+        
+        processCount(3, 0, false);
+        processCount(2, 1800, false);
+        processCount(1, 3600, true);
+    }
+    
+    function triggerReveal() {
+        playMusic();
+        
+        runBigCountdown(() => {
+            triggerHeartBurst();
+            
             birthdayMsg.style.display = 'block';
-            
-            // Show message section
             messageSection.style.display = 'flex';
             
-            // Trigger staggered fade-in for message card
             setTimeout(() => {
                 messageCard.classList.add('show');
                 showMessageLines();
             }, 100);
             
-            // Show gallery after message
             setTimeout(() => {
                 gallerySection.style.display = 'block';
                 showPhotoCards();
             }, 1200);
             
-            // Show music button
             musicBtn.classList.add('show');
-            
-            // Auto-play music when user clicks reveal
-            playMusic();
-            
-            // Start confetti
             startConfetti();
             
-            // Scroll to message
             setTimeout(() => {
                 messageSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }, 400);
-            
-        }, 800);
+        });
     }
     
     // ============================================
