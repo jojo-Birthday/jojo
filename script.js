@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // ============================================
     // 1. COUNTDOWN TIMER - STRICT INTERVAL LOGIC
     // ============================================
-    const targetDate = new Date("April 25, 2026 00:00:00").getTime();
+    const targetDate = new Date("April 22, 2026 00:00:00").getTime();
     
     const daysEl = document.getElementById("days");
     const hoursEl = document.getElementById("hours");
@@ -242,22 +242,42 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     // ============================================
-    // 3. STAGGERED MESSAGE REVEAL
+    // 3. TYPING MESSAGE REVEAL
     // ============================================
     function showMessageLines() {
-        const lines = document.querySelectorAll('.message-line');
+        const lines = Array.from(document.querySelectorAll('.message-line'));
         const signature = document.querySelector('.signature');
         
+        let totalDelay = 0;
+        
         lines.forEach((line, index) => {
+            const fullText = line.textContent.trim();
+            line.innerHTML = '<span class="typed-text"></span>';
+            const typedSpan = line.querySelector('.typed-text');
+            
+            const typeSpeed = 50;
+            const timeToType = fullText.length * typeSpeed;
+            const pauseBetween = 400;
+            const startDelay = totalDelay;
+            
             setTimeout(() => {
-                line.classList.add('show');
-            }, index * 200);
+                let charIndex = 0;
+                function typeNext() {
+                    if (charIndex < fullText.length) {
+                        typedSpan.textContent += fullText.charAt(charIndex);
+                        charIndex++;
+                        setTimeout(typeNext, typeSpeed);
+                    }
+                }
+                typeNext();
+            }, startDelay);
+            
+            totalDelay += timeToType + pauseBetween;
         });
         
-        // Show signature last
         setTimeout(() => {
             signature.classList.add('show');
-        }, lines.length * 200 + 200);
+        }, totalDelay);
     }
     
     // ============================================

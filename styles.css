@@ -490,17 +490,26 @@ body {
     color: var(--text-pink);
     text-align: center;
     font-weight: 400;
-    opacity: 0;
-    transform: translateY(35px);
-    filter: blur(10px);
-    transition: all 1s cubic-bezier(0.2, 0.8, 0.2, 1);
     margin-bottom: 20px;
+    min-height: 2.2em;
 }
 
-.message-line.show {
-    opacity: 1;
-    transform: translateY(0);
-    filter: blur(0);
+.message-line .typed-text {
+    display: inline;
+}
+
+.message-line .cursor {
+    display: inline-block;
+    width: 2px;
+    height: 1.2em;
+    background: var(--pink-rose);
+    margin-left: 1px;
+    animation: blink 0.8s infinite;
+}
+
+@keyframes blink {
+    0%, 50% { opacity: 1; }
+    51%, 100% { opacity: 0; }
 }
 
 .heart-inline {
