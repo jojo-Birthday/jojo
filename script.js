@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // ============================================
     // 1. COUNTDOWN TIMER - STRICT INTERVAL LOGIC
     // ============================================
-    const targetDate = new Date("April 25, 2026 00:00:00").getTime();
+    const targetDate = new Date("April 23, 2026 00:00:00").getTime();
     
     const daysEl = document.getElementById("days");
     const hoursEl = document.getElementById("hours");
@@ -237,6 +237,16 @@ document.addEventListener('DOMContentLoaded', () => {
             
             setTimeout(() => {
                 messageSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                
+                // Show birthday reveal bubble after message appears
+                const birthdayReveal = document.getElementById("birthdayReveal");
+                if (birthdayReveal) {
+                    birthdayReveal.style.display = 'block';
+                    setTimeout(() => {
+                        birthdayReveal.style.opacity = '1';
+                        birthdayReveal.style.transition = 'opacity 0.5s ease';
+                    }, 50);
+                }
             }, 400);
         });
     }
@@ -407,4 +417,102 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         isPlaying = !isPlaying;
     });
+
+    // ============================================
+    // FLOATING BIRTHDAY REVEAL INTERACTION
+    // ============================================
+    const revealBubble = document.getElementById('revealBubble');
+    const revealOval = document.getElementById('revealOval');
+    const closeBtn = document.getElementById('closeBtn');
+    const sparkleContainer = document.getElementById('sparkleContainer');
+    let isOvalOpen = false;
+
+    function createSparkles() {
+        const sparkles = ['✨', '💛', '⭐', '✨'];
+        sparkleContainer.innerHTML = '';
+        
+        for (let i = 0; i < 12; i++) {
+            const sparkle = document.createElement('span');
+            sparkle.className = 'sparkle';
+            sparkle.textContent = sparkles[Math.floor(Math.random() * sparkles.length)];
+            
+            const angle = (Math.random() * 360) * (Math.PI / 180);
+            const distance = 40 + Math.random() * 50;
+            const tx = Math.cos(angle) * distance;
+            const ty = Math.sin(angle) * distance;
+            
+            sparkle.style.setProperty('--tx', `${tx}px`);
+            sparkle.style.setProperty('--ty', `${ty}px`);
+            sparkle.style.left = '50%';
+            sparkle.style.top = '50%';
+            sparkle.style.marginLeft = `${-8 + Math.random() * 16}px`;
+            sparkle.style.marginTop = `${-8 + Math.random() * 16}px`;
+            sparkle.style.animationDelay = `${Math.random() * 0.2}s`;
+            
+            sparkleContainer.appendChild(sparkle);
+        }
+        
+        // Magic dust sparkles around date - tiny semi-transparent pink and gold
+        const dateSparkles = ['✦', '✧', '·', '•', '⋆'];
+        
+        for (let i = 0; i < 30; i++) {
+            const dust = document.createElement('span');
+            dust.className = 'date-sparkle';
+            dust.textContent = dateSparkles[Math.floor(Math.random() * dateSparkles.length)];
+            
+            // Position around the date area
+            const leftPos = 30 + Math.random() * 40; // 30-70%
+            const topPos = 50 + Math.random() * 30; // 50-80%
+            
+            dust.style.left = `${leftPos}%`;
+            dust.style.top = `${topPos}%`;
+            dust.style.fontSize = `${4 + Math.random() * 6}px`;
+            dust.style.opacity = 0;
+            dust.style.color = Math.random() > 0.5 ? 'rgba(255, 182, 193, 0.8)' : 'rgba(255, 215, 0, 0.7)';
+            
+            // Float upward animation
+            const moveY = -80 - Math.random() * 60;
+            const moveX = (Math.random() - 0.5) * 60;
+            dust.style.setProperty('--dust-tx', `${moveX}px`);
+            dust.style.setProperty('--dust-ty', `${moveY}px`);
+            dust.style.animationDelay = `${0.1 + Math.random() * 0.4}s`;
+            dust.style.animationDuration = `${1.2 + Math.random() * 0.8}s`;
+            
+            sparkleContainer.appendChild(dust);
+        }
+    }
+
+    function openOval() {
+        if (isOvalOpen) return;
+        isOvalOpen = true;
+        revealBubble.classList.add('hidden');
+        revealOval.classList.add('open');
+        createSparkles();
+    }
+
+    function closeOval() {
+        if (!isOvalOpen) return;
+        isOvalOpen = false;
+        revealOval.classList.remove('open');
+        setTimeout(() => {
+            revealBubble.classList.remove('hidden');
+        }, 400);
+    }
+
+    if (revealBubble && revealOval && closeBtn) {
+        revealBubble.addEventListener('click', openOval);
+        closeBtn.addEventListener('click', closeOval);
+        revealBubble.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                openOval();
+            }
+        });
+        closeBtn.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                closeOval();
+            }
+        });
+    }
 });
